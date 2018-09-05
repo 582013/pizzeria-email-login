@@ -1,0 +1,19 @@
+default: &default
+  adapter: sqlserver
+  pool: 5
+  timeout: 5000
+  host: DESKTOP-RHUP0I9
+  port: 49670
+  username: aws
+  password: aws
+
+  
+
+development:
+  <<: *default
+  database: Chronicle
+  
+
+test:
+  <<: *default
+  database: Chronicle

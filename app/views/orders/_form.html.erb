@@ -1,0 +1,106 @@
+<%= form_with(model: order, remote: true) do |form| %> 
+
+  <% if order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="field">
+    <%= form.label :"Customer Name" %>
+    <%= form.text_field :name, id: :order_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :Email %>
+    <%= form.text_field :email, id: :order_email %>
+  </div>
+  <%= form.hidden_field :list, id: :order_list %>
+  <!-- <input type='text' id='list' name='orderitems'> -->
+ <!-- use psql hstore is better with json data type -->
+<!--  <%= react_component('QuantityBox') %> -->
+ <!-- <%= react_component('HelloMessage', name: 'Judy') %> -->
+  <table id="order-item-table">
+    <tr>   
+      <th></th>
+      <th>Pizza</th>
+      <th>Price</th>
+      <th>Quantity</th>   
+    </tr>
+  <% Pizza.all.each do |pizza| %>
+         <tr>
+         <!-- <td><%= form.hidden_field  pizza.id %></td> -->
+         <td><%= form.label  pizza.id %></td>
+         <td><%= form.label  pizza.name %></td>
+         <td><%= form.label  pizza.price %></td>
+         <td><%= react_component "QuantityBox", {price: pizza.price} %></td>
+         </tr>
+  <% end %>
+  </table>
+<!--  <input type="hidden" name="total" >
+     Total: $<p id="total" >0</p>
+ -->
+ <!--  <input type="hidden" name="total" >
+     $<p style = 'display: hidden;' id="total" >0</p>
+ -->
+  <div class="actions">
+    <div class="field">
+    <%= form.label :Total %>
+    $<%= form.text_field :total, id: :order_total,  :value => 0, :readonly => true  %>
+  </div>
+   
+    <!--   <% form.submit 'Checkout' %> -->
+    <input type="submit" id="checkout" name="commit" value="Place Order" data-disable-with="Checkout">
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+$(function() {
+  $("#checkout").click(function() {
+    var itemList = new Array();
+
+    $('#order-item-table tr').each(function(row, tr){
+      var quantity = $(tr).find('td:eq(3)').text().match(/\–(.*)\+/g);
+      if (quantity != null){ quantity = quantity.toString().replace('+', '').replace('–', ''); }
+      itemList[row]={
+          "id" : $(tr).find('td:eq(0)').text()
+          , "name" :$(tr).find('td:eq(1)').text()
+          , "price" : $(tr).find('td:eq(2)').text()
+          , "quantity" : quantity
+      }   //works with ajax, but not with assign field value
+
+      //  itemList[row]={
+      //     "id" => $(tr).find('td:eq(0)').text()
+      //     , "name" => $(tr).find('td:eq(1)').text()
+      //     , "price" => $(tr).find('td:eq(2)').text()
+      //     , "quantity" => "88"
+      //     // , "quantity" : $(tr).find('td:eq(2)').text()
+      // }   doesn't work
+    }); 
+    document.getElementById("order_list").value = JSON.stringify(itemList);
+  
+    // alert( $("#order_total").val());
+    // $.ajax({ 
+    //   method: "POST",
+    //   url: "", 
+    //   contentType: "application/json",
+    //   data:  JSON.stringify({order: { list: itemList }}), 
+    //   success: function(data,status,xhr){
+    //     alert("8888888");
+    //   },
+    //   error: function(xhr,status,error){
+    //     console.log(xhr, status,error);
+    //     alert("ERROR!");
+    //   } 
+    // });
+    // alert ("after ajax");
+  });
+});
+</script>

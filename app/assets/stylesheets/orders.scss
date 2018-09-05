@@ -1,0 +1,43 @@
+// Place all the styles related to the Orders controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.qty-box {
+  // border: 1px solid #94c4ec;
+  // border-radius: 12px;
+  display: inline;
+  height: 60px;
+  /*margin: calc(50vh - 30px) auto 0 auto;*/
+  width: 200px;
+}
+
+span {;
+  color: #62a8e2;
+  font-family: sans-serif;
+  float: left;
+  line-height: 60px;
+  text-align: center;
+  width: calc(200px/3);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dec,
+.inc {
+  height: 50%;
+  
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.total{
+  float: right;
+}
